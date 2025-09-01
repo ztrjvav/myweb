@@ -576,39 +576,60 @@
             </div>
         </div>
     </header>
-    
     <!-- 主要内容区域 -->
-    <main class="container">
-        <!-- 下载信息区域 -->
-        <section class="download-section">
-            <h2 class="download-title">免费 Jvav 下载</h2>
-            <h3 class="download-subtitle">立即下载适用于您的台式机的Jvav软件！</h3>
-            <p class="version-info">Version 2.0 Pre-release Update 10090</p>
-            <p class="release-date">发布日期：2024 年 3 月 14 日</p>
-            <button class="btn" id="download-btn"><i class="fas fa-download"></i> 立即下载</button>
-            
-            <div class="download-options">
-                <div class="download-card">
-                    <i class="fab fa-windows"></i>
-                    <h3>Windows 版本</h3>
-                    <p>适用于 Windows 10/11 的 64 位安装程序</p>
-                    <button class="btn">下载</button>
-                </div>
-                <div class="download-card">
-                    <i class="fab fa-apple"></i>
-                    <h3>Mac 版本</h3>
-                    <p>适用于 macOS 10.14+ 的安装程序</p>
-                    <button class="btn">下载</button>
-                </div>
-                <div class="download-card">
-                    <i class="fab fa-linux"></i>
-                    <h3>Linux 版本</h3>
-                    <p>适用于各种 Linux 发行版的安装包</p>
-                    <button class="btn">下载</button>
-                </div>
-            </div>
-        </section>
+<main class="container">
+    <!-- 下载信息区域 -->
+    <section class="download-section">
+        <h2 class="download-title">免费 Jvav 下载</h2>
+        <h3 class="download-subtitle">立即下载适用于您的台式机的Jvav软件！</h3>
+        <p class="version-info">Version 2.0 Pre-release Update 10090</p>
+        <p class="release-date">发布日期：2024 年 3 月 14 日</p>
+        <button class="btn" id="download-btn"><i class="fas fa-download"></i> 立即下载</button>
         
+        <div class="download-options">
+            <div class="download-card">
+                <i class="fab fa-windows"></i>
+                <h3>Windows 版本</h3>
+                <p>适用于 Windows 10/11 的 64 位安装程序</p>
+                <button class="btn" id="windows-download">下载</button>
+            </div>
+            <div class="download-card">
+                <i class="fab fa-apple"></i>
+                <h3>Mac 版本</h3>
+                <p>适用于 macOS 10.14+ 的安装程序</p>
+                <button class="btn" id="mac-download">下载</button>
+            </div>
+            <div class="download-card">
+                <i class="fab fa-linux"></i>
+                <h3>Linux 版本</h3>
+                <p>适用于各种 Linux 发行版的安装包</p>
+                <button class="btn" id="linux-download">下载</button>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- JavaScript 部分 -->
+<script>
+    // 获取所有下载按钮
+    const windowsButton = document.getElementById('windows-download');
+    const macButton = document.getElementById('mac-download');
+    const linuxButton = document.getElementById('linux-download');
+    
+    // 为每个按钮添加点击事件
+    windowsButton.addEventListener('click', function() {
+        window.location.href = 'path/to/test1.apk'; // 替换为实际文件的路径
+    });
+
+    macButton.addEventListener('click', function() {
+        window.location.href = 'path/to/test1.apk'; // 替换为实际文件的路径
+    });
+
+    linuxButton.addEventListener('click', function() {
+        window.location.href = 'path/to/test1.apk'; // 替换为实际文件的路径
+    });
+</script>
+
         <!-- 所有下载选项 -->
         <section class="content-section">
             <h2 class="section-title"><i class="fas fa-list"></i> 所有Jvav下载</h2>
@@ -929,4 +950,5 @@ document.addEventListener('DOMContentLoaded', function() {
     // 检查登录状态
     checkLoginStatus();
     });
+
 </script>
