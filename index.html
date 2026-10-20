@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5f5f7">
-  <meta name="description" content="JVAV — 音乐与代码。一个 Apple 风格交互概念页，探索声音与创作的连接，正式主站 jvav.cc。">
+  <meta name="theme-color" content="#c51d45">
+  <meta name="description" content="JVAV — 音乐与代码。红色主题交互实验页，探索声音与创作的连接，正式主站 jvav.cc。">
   <meta name="color-scheme" content="light">
-  <title>JVAV — 音乐与代码 · Apple Design Concept</title>
+  <title>JVAV — 让灵感发生 | Music × Code</title>
   <style>
     :root {
       --ground:#f5f5f7; --surface:#ffffff; --ink:#1d1d1f;
@@ -204,6 +204,118 @@
       .segment-indicator { border-color:#424245; }
       .feedback,.demo-description,.section-heading p,.feature-row p { color:#424245; }
     }
+  
+    /* JVAV Crimson: Apple-inspired design system with a distinctly red identity */
+    :root {
+      --ground:#fff7f8;
+      --surface:#fffefe;
+      --ink:#26141a;
+      --secondary:#58434a;
+      --muted:#77636b;
+      --faint:#89747b;
+      --line:rgba(142,35,65,.12);
+      --red:#c51d45;
+      --deep:#971234;
+      --shadow:0 3px 9px rgba(83,15,32,.025),0 18px 52px rgba(122,20,45,.075);
+    }
+    body {
+      background:linear-gradient(180deg,#fff9fa 0%,#fff2f5 54%,#fff8f9 100%);
+    }
+    .nav-shell { background:rgba(255,247,249,.78); }
+    .nav-shell.scrolled { border-color:rgba(142,35,65,.12); }
+    .logo-mark {
+      background:var(--red);
+      box-shadow:0 4px 12px rgba(159,22,56,.19);
+    }
+    .nav-cta { background:var(--red); }
+    .nav-cta:hover { background:var(--deep); }
+    .hero {
+      position:relative; isolation:isolate; overflow:hidden;
+      margin-top:34px; min-height:565px;
+      padding:clamp(5.2rem,10vw,8rem) 2rem;
+      border-radius:36px;
+      color:#fff;
+      background:
+        radial-gradient(ellipse at 88% 12%,rgba(255,143,158,.47),transparent 33%),
+        radial-gradient(ellipse at 1% 110%,rgba(75,0,30,.29),transparent 47%),
+        linear-gradient(126deg,#93122f 0%,#c41f45 52%,#e74d64 100%);
+      box-shadow:0 22px 58px rgba(155,24,55,.18);
+    }
+    .hero::before {
+      content:""; position:absolute; width:410px; height:410px;
+      border:1px solid rgba(255,255,255,.17);
+      border-radius:50%; top:-158px; right:-92px; z-index:0;
+      box-shadow:0 0 0 69px rgba(255,255,255,.044),0 0 0 145px rgba(255,255,255,.027);
+      pointer-events:none;
+    }
+    .hero::after {
+      content:""; position:absolute; left:-100px; bottom:-227px;
+      width:510px; height:510px; border-radius:50%;
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 0 0 78px rgba(255,255,255,.027),0 0 0 167px rgba(255,255,255,.023);
+      z-index:0; pointer-events:none;
+    }
+    .hero > * { position:relative; z-index:1; }
+    .hero .kicker { color:#ffe7ed; }
+    .hero .kicker::before { background:#ffd2dc; }
+    .hero h1 { text-shadow:0 8px 28px rgba(77,4,30,.08); }
+    .hero .h1-soft { color:#ffe2e9; }
+    .hero p { color:#ffecf0; }
+    .hero-actions .primary { background:#fff; color:#a51c3c; box-shadow:0 7px 20px rgba(70,0,28,.12); }
+    .hero-actions .primary:hover { background:#fff0f3; color:#88172f; box-shadow:0 12px 28px rgba(70,0,28,.21); }
+    .hero .quiet-link { color:#fff5f7; }
+    .hero .quiet-link:hover { color:white; text-decoration:underline; text-underline-offset:5px; }
+    .showcase { border:1px solid rgba(158,42,72,.08); }
+    .showcase::before {
+      content:""; position:absolute; left:0; right:0; top:0; height:4px;
+      background:linear-gradient(90deg,#8f1433,#db3355,#f9a0ab);
+    }
+    .showcase-header .overline { color:var(--red); }
+    .demo-chip { background:#fff0f3; color:#a02340; border-color:rgba(165,28,60,.1); }
+    .segmented { background:#f8eaf0; }
+    .segment-indicator { border-color:rgba(176,44,75,.08); box-shadow:0 3px 13px rgba(115,23,49,.09); }
+    .listen { background:var(--red); }
+    .listen:hover { background:var(--deep); }
+    .instrument {
+      background:
+        radial-gradient(ellipse at 55% 32%,rgba(200,48,90,.36),transparent 60%),
+        linear-gradient(145deg,#4b1026,#230d18 85%);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 16px 37px rgba(73,10,30,.12);
+    }
+    .instrument::before { background:radial-gradient(circle,rgba(255,96,132,.26),transparent 70%); }
+    .instrument .ring { border-color:rgba(255,200,211,.23); }
+    .tone-second { background:#f64f79; }
+    .feature-panel { border:1px solid rgba(158,42,72,.075); }
+    .feature-row { transition:background .22s ease; }
+    .feature-row:hover { background:#fff5f7; }
+    .feature-num { color:var(--red); font-weight:700; }
+    .feature-right { color:#d77a8e; }
+    .closing-panel {
+      background:
+        radial-gradient(ellipse at 87% 17%,rgba(255,106,132,.34),transparent 45%),
+        linear-gradient(125deg,#5d0d29 0%,#981638 58%,#b82647 100%);
+      box-shadow:0 18px 48px rgba(121,21,49,.13);
+    }
+    .closing-panel::before { background:#fa6288; filter:blur(78px); opacity:.45; }
+    .closing-panel .glass-label { background:rgba(255,225,234,.14); }
+    .closing-panel p { color:#ffe0e8; }
+    .closing-panel .primary { color:#9d173a; }
+    .closing-panel .primary:hover { background:#fff0f3; }
+    .footer { border-color:rgba(142,35,65,.12); }
+    @media(max-width:520px) {
+      .hero { margin-top:18px; padding:4.75rem 1.25rem 4.55rem; border-radius:25px; min-height:auto; }
+      .hero::before { right:-270px; }
+      .hero::after { left:-380px; }
+    }
+    @media(prefers-reduced-transparency:reduce) {
+      .nav-shell { background:#fff7f9; -webkit-backdrop-filter:none; backdrop-filter:none; }
+    }
+    @media(prefers-contrast:more) {
+      .hero { background:#a51437; }
+      .hero p,.hero .h1-soft,.hero .kicker { color:#fff; }
+      .showcase,.feature-panel { border:1px solid #67273b; }
+    }
+
   </style>
 </head>
 <body>
@@ -235,7 +347,7 @@
     <section class="wrap showcase" id="sound-lab" aria-labelledby="demo-title">
       <div class="showcase-header">
         <div><p class="overline">AN INTERACTIVE EXPLORATION</p><h2 id="demo-title">让两个音，开始对话。</h2></div>
-        <span class="demo-chip">交互概念演示</span>
+        <span class="demo-chip">可交互 · 可试听</span>
       </div>
       <div class="demo-layout">
         <div class="demo-controls">
@@ -300,7 +412,7 @@
   </main>
   <footer class="footer">
     <div class="wrap">
-      <span>© 2026 JVAV · 设计实验页，非 Apple 官方网站。</span>
+      <span>© 2026 JVAV · 音乐 × 代码 · 独立设计作品。</span>
       <span><a href="https://jvav.cc/" target="_blank" rel="noopener noreferrer">jvav.cc ↗</a></span>
     </div>
   </footer>
