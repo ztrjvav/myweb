@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f5f7">
+  <meta name="description" content="JVAV — 音乐与代码。一个 Apple 风格交互概念页，探索声音与创作的连接，正式主站 jvav.cc。">
+  <meta name="color-scheme" content="light">
+  <title>JVAV — 音乐与代码 · Apple Design Concept</title>
+  <style>
+    :root {
+      --ground:#f5f5f7; --surface:#ffffff; --ink:#1d1d1f;
+      --secondary:#424245; --muted:#6e6e73; --faint:#86868b;
+      --line:rgba(0,0,0,.075); --red:#b42c43; --deep:#8f2136;
+      --ease-out:cubic-bezier(.22,1,.36,1);
+      --shadow:0 1px 3px rgba(0,0,0,.035),0 14px 40px rgba(0,0,0,.055);
+    }
+    *,*::before,*::after { box-sizing:border-box; }
+    html { scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+    body {
+      margin:0; min-width:320px; background:var(--ground); color:var(--ink);
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+      font-optical-sizing:auto; -webkit-font-smoothing:antialiased;
+    }
+    a { text-decoration:none; color:inherit; }
+    button { font:inherit; cursor:pointer; }
+    button, a { -webkit-tap-highlight-color:transparent; }
+    a:focus-visible,button:focus-visible { outline:3px solid var(--red); outline-offset:4px; }
+    .skip { position:absolute; z-index:20; left:1rem; top:-5rem; background:white; padding:1rem; border-radius:12px; }
+    .skip:focus { top:1rem; }
+    .wrap { width:min(100% - 44px,1080px); margin-inline:auto; }
+    .nav-shell {
+      position:sticky; top:0; z-index:10;
+      background:rgba(245,245,247,.72);
+      -webkit-backdrop-filter:saturate(180%) blur(20px);
+      backdrop-filter:saturate(180%) blur(20px);
+      border-bottom:1px solid transparent;
+      transition:border-color .25s ease,box-shadow .25s ease;
+    }
+    .nav-shell.scrolled { border-color:var(--line); box-shadow:0 1px 12px rgba(0,0,0,.04); }
+    .nav-inner { min-height:67px; display:flex; justify-content:space-between; align-items:center; gap:1rem; }
+    .logo { display:inline-flex; align-items:center; gap:.65rem; font-weight:750; font-size:1.05rem; letter-spacing:-.055em; }
+    .logo-mark { display:inline-grid; place-items:center; background:var(--ink); color:white; width:29px; height:29px; border-radius:8px; font-size:.82rem; font-weight:850; letter-spacing:-.08em; }
+    .logo small { color:var(--muted); font-size:.67rem; font-weight:500; letter-spacing:.015em; margin-left:.16rem; }
+    .nav-right { display:flex; align-items:center; gap:1.5rem; font-size:.84rem; color:var(--secondary); }
+    .nav-right a:not(.nav-cta):hover { color:var(--red); }
+    .nav-cta { min-height:38px; display:inline-flex; justify-content:center; align-items:center; gap:.35rem;
+      background:var(--ink); color:white; border-radius:999px; padding:.5rem 1rem; font-weight:600;
+      transition:background .2s,transform .2s var(--ease-out); }
+    .nav-cta:hover { background:var(--deep); }
+    .nav-cta:active { transform:scale(.97); }
+    .hero { padding:clamp(4.8rem,9vw,8rem) 0 5.25rem; text-align:center; }
+    .kicker { display:inline-flex; align-items:center; gap:.5rem; color:var(--red); text-transform:uppercase;
+      font-size:.73rem; font-weight:700; letter-spacing:.13em; }
+    .kicker::before { content:""; background:var(--red); width:6px; height:6px; border-radius:50%; }
+    h1 { font-size:clamp(3rem,7.15vw,5.65rem); letter-spacing:-.062em; line-height:1.14;
+      font-weight:720; margin:1.5rem 0 1.45rem; }
+    .h1-soft { color:var(--muted); }
+    .hero p { color:var(--secondary); font-size:clamp(1rem,2vw,1.23rem); line-height:1.85;
+      max-width:680px; margin:0 auto; }
+    .hero-actions { display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:1rem; margin-top:2.2rem; }
+    .primary { min-height:48px; display:inline-flex; gap:.65rem; justify-content:center; align-items:center;
+      padding:.74rem 1.45rem; border-radius:999px; background:var(--red); color:white;
+      font-size:.95rem; font-weight:630; border:0;
+      transition:transform .22s var(--ease-out),background .22s,box-shadow .22s; }
+    .primary:hover { background:var(--deep); transform:translateY(-2px); box-shadow:0 12px 28px rgba(180,44,67,.22); }
+    .primary:active { transform:scale(.97); transition-duration:.1s; }
+    .quiet-link { min-height:44px; padding:.65rem 1rem; display:inline-flex; align-items:center; gap:.5rem; font-size:.91rem; font-weight:580; }
+    .quiet-link:hover { color:var(--red); }
+    .arrow { display:inline-block; font-size:1rem; }
+    .showcase {
+      overflow:hidden; background:var(--surface); border-radius:26px;
+      box-shadow:var(--shadow); border:1px solid rgba(0,0,0,.035);
+      padding:clamp(1.5rem,4vw,3.15rem); position:relative;
+    }
+    .showcase-header { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:1.65rem; }
+    .showcase-header h2 { font-size:clamp(1.3rem,2.7vw,1.65rem); line-height:1.25; letter-spacing:-.035em; font-weight:700; margin:0; }
+    .overline { font-size:.75rem; color:var(--muted); letter-spacing:.09em; font-weight:650; margin:0 0 .6rem; }
+    .demo-chip { border:1px solid var(--line); background:#fafafc; border-radius:999px; color:var(--muted);
+      padding:.55rem .8rem; white-space:nowrap; font-size:.72rem; }
+    .demo-layout { display:grid; grid-template-columns:1fr 1.05fr; gap:clamp(1.7rem,5vw,4rem); align-items:center; }
+    .demo-controls { padding:1.2rem 0; }
+    .demo-intro { font-size:clamp(1.8rem,3.7vw,2.7rem); line-height:1.23; letter-spacing:-.05em; font-weight:690; margin:0 0 .9rem; }
+    .demo-description { margin:0 0 1.75rem; color:var(--muted); font-size:.96rem; line-height:1.9; max-width:26rem; min-height:4.5rem; }
+    .segmented { display:flex; position:relative; isolation:isolate; padding:4px; background:#eeeef0;
+      border-radius:999px; gap:0; width:100%; max-width:370px; min-height:50px; }
+    .segment-indicator { position:absolute; top:4px; left:4px; bottom:4px; width:calc((100% - 8px) / 3);
+      background:white; border:1px solid rgba(0,0,0,.04); border-radius:999px; z-index:-1;
+      box-shadow:0 1px 3px rgba(0,0,0,.08),0 3px 10px rgba(0,0,0,.035); will-change:transform; }
+    .segment { border:0; background:transparent; color:var(--muted); min-height:42px;
+      flex:1; min-width:0; border-radius:999px; padding:0 .5rem;
+      font-size:.86rem; font-weight:570; transition:color .16s ease,transform .12s ease; }
+    .segment[aria-pressed="true"] { color:var(--ink); font-weight:700; }
+    .segment:active { transform:scale(.96); }
+    .audition { margin-top:1.5rem; display:flex; align-items:center; flex-wrap:wrap; gap:.85rem; }
+    .listen { min-height:46px; border:0; background:var(--ink); color:white; font-size:.88rem;
+      font-weight:620; border-radius:999px; padding:.7rem 1.2rem; display:inline-flex; align-items:center; gap:.62rem;
+      transition:transform .2s var(--ease-out), background .2s; }
+    .listen:hover { background:var(--deep); }
+    .listen:active { transform:scale(.96); transition-duration:.1s; }
+    .listen svg { width:17px; height:17px; display:block; }
+    .feedback { color:var(--muted); font-size:.77rem; min-height:1.1rem; }
+    .instrument { height:360px; border-radius:22px; background:radial-gradient(circle at 50% 24%,#333337,#111114 66%);
+      position:relative; overflow:hidden; display:flex; justify-content:center; align-items:center;
+      color:white; box-shadow:inset 0 1px 0 rgba(255,255,255,.08); }
+    .instrument::before { content:""; position:absolute; width:340px; height:340px; border-radius:50%;
+      background:radial-gradient(circle,rgba(180,44,67,.23),transparent 67%); top:20px; left:calc(50% - 170px);
+      pointer-events:none; }
+    .instrument::after { content:""; position:absolute; inset:0; opacity:.055;
+      background-image:linear-gradient(rgba(255,255,255,.3) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.3) 1px,transparent 1px);
+      background-size:27px 27px; pointer-events:none; mask-image:linear-gradient(to bottom,transparent,black 70%); }
+    .instrument-head { position:absolute; left:24px; top:23px; font-size:.64rem; font-weight:680;
+      letter-spacing:.12em; color:#9e9ea5; }
+    .instrument-head strong { color:#f5f5f7; font-weight:680; }
+    .instrument-foot { position:absolute; bottom:22px; left:24px; right:24px; font-size:.72rem; color:#afafb5; display:flex; justify-content:space-between; }
+    .rings { width:235px; height:235px; position:relative; display:grid; place-items:center; }
+    .ring { position:absolute; border:1px solid rgba(255,255,255,.13); border-radius:50%; inset:13px; }
+    .ring:nth-child(2) { inset:33px; }
+    .ring:nth-child(3) { inset:53px; }
+    .tone { position:absolute; width:70px; height:70px; border-radius:50%; display:grid; place-items:center;
+      background:#fafafd; color:#1d1d1f; box-shadow:0 8px 30px rgba(0,0,0,.25); font-size:1.05rem; font-weight:750;
+      transition:transform .36s var(--ease-out),background .25s,color .25s; }
+    .tone-first { left:18px; top:83px; }
+    .tone-second { right:15px; top:78px; transform:translateY(-15px); background:#db526a; color:white; }
+    .instrument[data-interval="third"] .tone-second { transform:translateY(4px); }
+    .instrument[data-interval="fifth"] .tone-second { transform:translateY(-15px); }
+    .instrument[data-interval="seventh"] .tone-second { transform:translateY(-36px); }
+    .connection { position:absolute; width:85px; height:1px; left:75px; top:117px;
+      background:linear-gradient(90deg,rgba(255,255,255,.2),rgba(255,255,255,.75),rgba(255,255,255,.2));
+      transform-origin:left center; transform:rotate(-7deg); }
+    .instrument[data-interval="third"] .connection { transform:rotate(3deg); }
+    .instrument[data-interval="seventh"] .connection { transform:rotate(-17deg); }
+    .playing .ring { animation:echo .64s var(--ease-out) both; }
+    .playing .ring:nth-child(2) { animation-delay:.08s; }
+    .playing .ring:nth-child(3) { animation-delay:.16s; }
+    @keyframes echo { 0%{opacity:.2;transform:scale(.94)} 52%{opacity:1;transform:scale(1.035)} 100%{opacity:1;transform:scale(1)} }
+    .features { padding:clamp(5rem,10vw,8rem) 0; }
+    .section-heading { text-align:center; margin:0 0 2.2rem; }
+    .section-heading .eyebrow { font-size:.75rem; color:var(--red); font-weight:700; margin-bottom:.85rem; }
+    .section-heading h2 { font-size:clamp(2rem,4.8vw,3.35rem); letter-spacing:-.053em; line-height:1.2; margin:0 0 1rem; }
+    .section-heading p { color:var(--muted); font-size:1rem; line-height:1.85; max-width:35rem; margin:0 auto; }
+    .feature-panel { background:white; border-radius:22px; box-shadow:var(--shadow); overflow:hidden; }
+    .feature-row { padding:1.6rem 2rem; display:grid; align-items:center;
+      grid-template-columns:46px minmax(0,1fr) auto; gap:1.6rem; position:relative; }
+    .feature-row + .feature-row::before { content:""; position:absolute; left:2rem; right:2rem; top:0; height:1px; background:var(--line); }
+    .feature-num { font-size:.9rem; color:var(--faint); font-variant-numeric:tabular-nums; }
+    .feature-row h3 { font-size:1.1rem; letter-spacing:-.025em; margin:0 0 .45rem; font-weight:680; }
+    .feature-row p { font-size:.88rem; line-height:1.8; margin:0; color:var(--muted); }
+    .feature-right { color:var(--faint); font-size:1.3rem; }
+    .closing { padding-bottom:clamp(5rem,9vw,7.2rem); }
+    .closing-panel { border-radius:26px; overflow:hidden; background:#17171b; color:white; position:relative;
+      padding:clamp(2.5rem,7vw,5.2rem); isolation:isolate; }
+    .closing-panel::before { content:""; position:absolute; z-index:-1; width:420px; height:420px;
+      right:-90px; top:-155px; border-radius:50%; background:#7e1930;
+      filter:blur(64px); opacity:.58; pointer-events:none; }
+    .closing-panel .glass-label { width:fit-content; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.21);
+      -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+      border-radius:999px; font-size:.76rem; font-weight:610; padding:.48rem .9rem; color:#f9ebed; }
+    .closing-panel h2 { font-size:clamp(2.2rem,5vw,3.7rem); line-height:1.22; letter-spacing:-.056em;
+      margin:1.6rem 0 .8rem; }
+    .closing-panel p { color:#c5c5c9; max-width:31rem; font-size:1rem; line-height:1.85; margin:0 0 2rem; }
+    .closing-panel .primary { background:#fff; color:#1d1d1f; }
+    .closing-panel .primary:hover { background:#e8e8ed; box-shadow:0 12px 28px rgba(0,0,0,.19); }
+    .footer { border-top:1px solid var(--line); padding:1.6rem 0 2.2rem; font-size:.78rem; color:var(--muted); }
+    .footer .wrap { display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+    .footer a:hover { color:var(--red); }
+    @media(max-width:780px) {
+      .demo-layout { grid-template-columns:1fr; }
+      .instrument { height:330px; }
+      .demo-controls { padding:0; }
+      .demo-description { min-height:0; }
+      .hero { padding-bottom:4rem; }
+    }
+    @media(max-width:520px) {
+      .nav-inner { min-height:62px; }
+      .logo small { display:none; }
+      .nav-right { gap:.65rem; }
+      .hide-sm { display:none; }
+      .hero { padding:4.3rem 0 3.5rem; }
+      h1 { letter-spacing:-.052em; }
+      .hero-actions { gap:.6rem; }
+      .hero-actions .primary { width:100%; }
+      .showcase { padding:1.45rem 1.2rem; border-radius:22px; }
+      .showcase-header { align-items:flex-start; }
+      .demo-chip { font-size:.65rem; padding:.45rem .65rem; }
+      .instrument { height:300px; }
+      .rings { transform:scale(.86); }
+      .feature-row { grid-template-columns:32px minmax(0,1fr) 10px; padding:1.4rem 1.3rem; gap:.7rem; }
+      .feature-row + .feature-row::before { left:1.3rem; right:1.3rem; }
+      .footer .wrap { flex-direction:column; align-items:flex-start; }
+    }
+    @media(prefers-reduced-motion:reduce) {
+      *,*::before,*::after { scroll-behavior:auto!important; animation:none!important; transition-duration:.01ms!important; }
+      .segment-indicator { will-change:auto; }
+    }
+    @media(prefers-reduced-transparency:reduce) {
+      .nav-shell { background:#f5f5f7; -webkit-backdrop-filter:none; backdrop-filter:none; }
+      .closing-panel .glass-label { background:#3b3235; -webkit-backdrop-filter:none; backdrop-filter:none; }
+    }
+    @media(prefers-contrast:more) {
+      .nav-shell { background:#fff; border-bottom:1px solid #38383c; }
+      .showcase,.feature-panel { border:1px solid #424245; box-shadow:none; }
+      .demo-chip,.segmented { border:1px solid #424245; }
+      .segment-indicator { border-color:#424245; }
+      .feedback,.demo-description,.section-heading p,.feature-row p { color:#424245; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">跳转到内容</a>
+  <header class="nav-shell" id="nav-shell">
+    <div class="wrap nav-inner">
+      <a class="logo" href="#top" aria-label="JVAV 首页">
+        <span class="logo-mark">J.</span>
+        <span>JVAV <small>music × code</small></span>
+      </a>
+      <nav class="nav-right" aria-label="主导航">
+        <a class="hide-sm" href="#explore">探索方向</a>
+        <a class="hide-sm" href="#sound-lab">声音实验</a>
+        <a class="nav-cta" href="https://jvav.cc/" target="_blank" rel="noopener noreferrer">进入主站 <span aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <section class="wrap hero" id="top" aria-labelledby="hero-title">
+      <div class="kicker">JVAV / MUSIC × CODE</div>
+      <h1 id="hero-title">让灵感发生。<br><span class="h1-soft">让好奇有形。</span></h1>
+      <p>音乐不只用来聆听，代码也不只用来编写。<br>我们让声音、练习和创造，在同一个空间里相遇。</p>
+      <div class="hero-actions">
+        <a class="primary" href="https://jvav.cc/" target="_blank" rel="noopener noreferrer">探索 JVAV 主站 <span class="arrow" aria-hidden="true">↗</span></a>
+        <a class="quiet-link" href="#sound-lab">试试声音实验 <span aria-hidden="true">↓</span></a>
+      </div>
+    </section>
+
+    <section class="wrap showcase" id="sound-lab" aria-labelledby="demo-title">
+      <div class="showcase-header">
+        <div><p class="overline">AN INTERACTIVE EXPLORATION</p><h2 id="demo-title">让两个音，开始对话。</h2></div>
+        <span class="demo-chip">交互概念演示</span>
+      </div>
+      <div class="demo-layout">
+        <div class="demo-controls">
+          <h3 class="demo-intro" id="interval-title">纯五度。<br>稳定，又开阔。</h3>
+          <p class="demo-description" id="interval-description">把两个音放在一起，耳朵会听见一种特别清晰的支撑感。试着切换不同的音程，感受距离如何改变情绪。</p>
+          <div class="segmented" role="group" aria-label="选择试听音程" id="interval-switch">
+            <span class="segment-indicator" id="segment-indicator" aria-hidden="true"></span>
+            <button type="button" class="segment" data-index="0" aria-pressed="false">大三度</button>
+            <button type="button" class="segment" data-index="1" aria-pressed="true">纯五度</button>
+            <button type="button" class="segment" data-index="2" aria-pressed="false">小七度</button>
+          </div>
+          <div class="audition">
+            <button type="button" class="listen" id="listen">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5 12 7-12 7V5Z"/></svg>
+              试听这两个音
+            </button>
+            <span class="feedback" id="listen-feedback" aria-live="polite">C4 → G4</span>
+          </div>
+        </div>
+        <div class="instrument" id="instrument" data-interval="fifth" aria-label="C4 到 G4 的音程示意图">
+          <div class="instrument-head"><strong>JVAV</strong> / SOUND SPACE</div>
+          <div class="rings" aria-hidden="true">
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <span class="connection"></span>
+            <span class="tone tone-first">C4</span>
+            <span class="tone tone-second" id="tone-second">G4</span>
+          </div>
+          <div class="instrument-foot"><span id="interval-label">PERFECT FIFTH</span><span>440 / 12 TET</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features" id="explore" aria-labelledby="features-title">
+      <div class="wrap">
+        <div class="section-heading">
+          <div class="eyebrow">EXPLORE THE POSSIBILITIES</div>
+          <h2 id="features-title">一切从探索开始。</h2>
+          <p>JVAV 关心的不是复杂功能的堆叠，而是把那些原本抽象的想法，变成可以理解和感受的体验。</p>
+        </div>
+        <div class="feature-panel">
+          <div class="feature-row">
+            <span class="feature-num">01</span><div><h3>听见结构</h3><p>从音程、和弦到音阶，用耳朵认识音乐内部的关系。</p></div><span class="feature-right" aria-hidden="true">↗</span>
+          </div>
+          <div class="feature-row">
+            <span class="feature-num">02</span><div><h3>创造工具</h3><p>让代码成为灵感的延伸，把好奇变成真实可用的小实验。</p></div><span class="feature-right" aria-hidden="true">↗</span>
+          </div>
+          <div class="feature-row">
+            <span class="feature-num">03</span><div><h3>持续生长</h3><p>从一次练习、一个问题开始，慢慢搭建自己的创造空间。</p></div><span class="feature-right" aria-hidden="true">↗</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap closing" aria-labelledby="closing-title">
+      <div class="closing-panel">
+        <div class="glass-label">jvav.cc · Official Website</div>
+        <h2 id="closing-title">好奇心，<br>值得有个去处。</h2>
+        <p>这里是一段设计实验。真正的 JVAV 主站，就在下一次点击之后。</p>
+        <a class="primary" href="https://jvav.cc/" target="_blank" rel="noopener noreferrer">访问 jvav.cc <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="wrap">
+      <span>© 2026 JVAV · 设计实验页，非 Apple 官方网站。</span>
+      <span><a href="https://jvav.cc/" target="_blank" rel="noopener noreferrer">jvav.cc ↗</a></span>
+    </div>
+  </footer>
+  <script>
+    (() => {
+      'use strict';
+      const choices = [
+        {key:'third', title:'大三度。<br>明亮，又亲近。', description:'两个音之间隔了四个半音，像一种轻快的回应。试着听听，它与纯五度有何不同。', note:'E4', hz:329.6276, label:'MAJOR THIRD'},
+        {key:'fifth', title:'纯五度。<br>稳定，又开阔。', description:'把两个音放在一起，耳朵会听见一种特别清晰的支撑感。试着切换不同的音程，感受距离如何改变情绪。', note:'G4', hz:391.9954, label:'PERFECT FIFTH'},
+        {key:'seventh', title:'小七度。<br>松弛，还有一点悬念。', description:'距离拉远了，声音间的张力也随之改变。感受它如何留下尚未说完的空间。', note:'B♭4', hz:466.1638, label:'MINOR SEVENTH'}
+      ];
+      const buttons=[...document.querySelectorAll('.segment')];
+      const track=document.getElementById('interval-switch');
+      const indicator=document.getElementById('segment-indicator');
+      const instrument=document.getElementById('instrument');
+      const feedback=document.getElementById('listen-feedback');
+      const action=document.getElementById('listen');
+      const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+      let selected=1, x=0, v=0, target=0, lastFrame=0, frame=0, playToken=0, audioContext;
+      const refreshTarget=() => {
+        const t=track.getBoundingClientRect();
+        const b=buttons[selected].getBoundingClientRect();
+        target=b.left-t.left;
+        indicator.style.width=b.width+'px';
+        if (reduced.matches) { x=target; v=0; indicator.style.transform='translate3d('+x+'px,0,0)'; }
+        else startSpring();
+      };
+      const spring=(now) => {
+        const dt=Math.min((now-lastFrame)/1000||1/60,.032); lastFrame=now;
+        const w=20;
+        const a=w*w*(target-x)-2*w*v;
+        v+=a*dt;
+        x+=v*dt;
+        if(Math.abs(target-x)<.1 && Math.abs(v)<.3){x=target;v=0;frame=0;}
+        indicator.style.transform='translate3d('+x.toFixed(3)+'px,0,0)';
+        if(frame) frame=requestAnimationFrame(spring);
+      };
+      const startSpring=() => {
+        if(!frame) {lastFrame=performance.now();frame=requestAnimationFrame(spring);}
+      };
+      const select=(n,focus=false) => {
+        selected=Math.max(0,Math.min(choices.length-1,n));
+        const c=choices[selected];
+        buttons.forEach((button,i)=>button.setAttribute('aria-pressed',String(i===selected)));
+        document.getElementById('interval-title').innerHTML=c.title;
+        document.getElementById('interval-description').textContent=c.description;
+        document.getElementById('tone-second').textContent=c.note;
+        document.getElementById('interval-label').textContent=c.label;
+        instrument.dataset.interval=c.key;
+        instrument.setAttribute('aria-label','C4 到 '+c.note+' 的音程示意图');
+        feedback.textContent='C4 → '+c.note;
+        refreshTarget();
+        if(focus)buttons[selected].focus();
+      };
+      buttons.forEach((b,i)=>{
+        b.addEventListener('click',()=>select(i));
+        b.addEventListener('keydown',e=>{
+          if(e.key==='ArrowRight'||e.key==='ArrowLeft'){
+            e.preventDefault();select((i+(e.key==='ArrowRight'?1:2))%3,true);
+          }else if(e.key==='Home'||e.key==='End'){
+            e.preventDefault();select(e.key==='Home'?0:2,true);
+          }
+        });
+      });
+      window.addEventListener('resize',refreshTarget,{passive:true});
+      reduced.addEventListener?.('change',refreshTarget);
+      const nav=document.getElementById('nav-shell');
+      const updateNav=()=>nav.classList.toggle('scrolled',window.scrollY>8);
+      window.addEventListener('scroll',updateNav,{passive:true});updateNav();
+      const note=(ctx,hz,start,duration) => {
+        const osc=ctx.createOscillator();const gain=ctx.createGain();
+        osc.type='sine';osc.frequency.setValueAtTime(hz,start);
+        gain.gain.setValueAtTime(.0001,start);
+        gain.gain.exponentialRampToValueAtTime(.16,start+.025);
+        gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
+        osc.connect(gain);gain.connect(ctx.destination);
+        osc.start(start);osc.stop(start+duration+.03);
+      };
+      action.addEventListener('click',async()=>{
+        if(!('AudioContext' in window)&&!('webkitAudioContext' in window)){
+          feedback.textContent='当前浏览器不支持音频试听';return;
+        }
+        try {
+          audioContext ??=new (window.AudioContext||window.webkitAudioContext)();
+          if(audioContext.state==='suspended')await audioContext.resume();
+          const c=choices[selected],start=audioContext.currentTime+.02;
+          note(audioContext,261.6256,start,.28);note(audioContext,c.hz,start+.34,.33);
+          const token=++playToken;
+          instrument.classList.remove('playing');
+          void instrument.offsetWidth;
+          instrument.classList.add('playing');
+          feedback.textContent='正在试听 · C4 → '+c.note;
+          window.setTimeout(()=>{if(token===playToken){instrument.classList.remove('playing');feedback.textContent='C4 → '+choices[selected].note;}},850);
+        }catch(_){ feedback.textContent='播放失败，请检查声音权限'; }
+      });
+      if ('ResizeObserver' in window) new ResizeObserver(refreshTarget).observe(track);
+      select(1);
+    })();
+  </script>
+</body>
+</html>
