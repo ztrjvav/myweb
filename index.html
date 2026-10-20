@@ -3,260 +3,514 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f8f4ee">
-  <meta name="description" content="JVAV 是周天瑞的音乐与代码工作室。访问 jvav.cc，探索音乐练习、声音实验与正在生长的想法。">
-  <title>JVAV — 音乐与代码工作室｜主站入口</title>
+  <meta name="theme-color" content="#c51d45">
+  <meta name="description" content="JVAV — 音乐与代码。红色主题交互实验页，探索声音与创作的连接，正式主站 jvav.cc。">
+  <meta name="color-scheme" content="light">
+  <title>JVAV — 让灵感发生 | Music × Code</title>
   <style>
     :root {
-      color-scheme: light;
-      --paper: #f8f4ee;
-      --white: #fffcf7;
-      --ink: #241d1c;
-      --muted: #756d69;
-      --red: #b62938;
-      --deep-red: #84202d;
-      --soft-red: #f4e5e3;
-      --line: #e1d8d0;
-      --shadow: 0 32px 80px rgba(77, 42, 42, .11);
+      --ground:#f5f5f7; --surface:#ffffff; --ink:#1d1d1f;
+      --secondary:#424245; --muted:#6e6e73; --faint:#86868b;
+      --line:rgba(0,0,0,.075); --red:#b42c43; --deep:#8f2136;
+      --ease-out:cubic-bezier(.22,1,.36,1);
+      --shadow:0 1px 3px rgba(0,0,0,.035),0 14px 40px rgba(0,0,0,.055);
     }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    *,*::before,*::after { box-sizing:border-box; }
+    html { scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
     body {
-      margin: 0;
-      min-width: 320px;
-      background: var(--paper);
-      color: var(--ink);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      -webkit-font-smoothing: antialiased;
+      margin:0; min-width:320px; background:var(--ground); color:var(--ink);
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+      font-optical-sizing:auto; -webkit-font-smoothing:antialiased;
     }
-    a { color: inherit; text-decoration: none; }
-    button, a { -webkit-tap-highlight-color: transparent; }
-    a:focus-visible { outline: 3px solid var(--red); outline-offset: 5px; }
-    .skip {
-      position: absolute; top: -80px; left: 15px; padding: 12px 18px;
-      z-index: 10; background: var(--white); border: 2px solid var(--red);
+    a { text-decoration:none; color:inherit; }
+    button { font:inherit; cursor:pointer; }
+    button, a { -webkit-tap-highlight-color:transparent; }
+    a:focus-visible,button:focus-visible { outline:3px solid var(--red); outline-offset:4px; }
+    .skip { position:absolute; z-index:20; left:1rem; top:-5rem; background:white; padding:1rem; border-radius:12px; }
+    .skip:focus { top:1rem; }
+    .wrap { width:min(100% - 44px,1080px); margin-inline:auto; }
+    .nav-shell {
+      position:sticky; top:0; z-index:10;
+      background:rgba(245,245,247,.72);
+      -webkit-backdrop-filter:saturate(180%) blur(20px);
+      backdrop-filter:saturate(180%) blur(20px);
+      border-bottom:1px solid transparent;
+      transition:border-color .25s ease,box-shadow .25s ease;
     }
-    .skip:focus { top: 15px; }
-    .container { max-width: 1220px; padding: 0 40px; margin: 0 auto; }
-    .site-header { position: relative; z-index: 2; border-bottom: 1px solid var(--line); }
-    .header-inner { display: flex; justify-content: space-between; align-items: center; min-height: 94px; gap: 30px; }
-    .brand { display: flex; align-items: center; gap: 12px; width: fit-content; }
-    .brand-mark {
-      width: 43px; height: 43px; display: grid; place-items: center;
-      background: var(--red); color: var(--white); font-weight: 900; font-size: 19px;
-      letter-spacing: -.13em; padding-right: 3px; border-radius: 4px;
-      transform: rotate(-6deg);
+    .nav-shell.scrolled { border-color:var(--line); box-shadow:0 1px 12px rgba(0,0,0,.04); }
+    .nav-inner { min-height:67px; display:flex; justify-content:space-between; align-items:center; gap:1rem; }
+    .logo { display:inline-flex; align-items:center; gap:.65rem; font-weight:750; font-size:1.05rem; letter-spacing:-.055em; }
+    .logo-mark { display:inline-grid; place-items:center; background:var(--ink); color:white; width:29px; height:29px; border-radius:8px; font-size:.82rem; font-weight:850; letter-spacing:-.08em; }
+    .logo small { color:var(--muted); font-size:.67rem; font-weight:500; letter-spacing:.015em; margin-left:.16rem; }
+    .nav-right { display:flex; align-items:center; gap:1.5rem; font-size:.84rem; color:var(--secondary); }
+    .nav-right a:not(.nav-cta):hover { color:var(--red); }
+    .nav-cta { min-height:38px; display:inline-flex; justify-content:center; align-items:center; gap:.35rem;
+      background:var(--ink); color:white; border-radius:999px; padding:.5rem 1rem; font-weight:600;
+      transition:background .2s,transform .2s var(--ease-out); }
+    .nav-cta:hover { background:var(--deep); }
+    .nav-cta:active { transform:scale(.97); }
+    .hero { padding:clamp(4.8rem,9vw,8rem) 0 5.25rem; text-align:center; }
+    .kicker { display:inline-flex; align-items:center; gap:.5rem; color:var(--red); text-transform:uppercase;
+      font-size:.73rem; font-weight:700; letter-spacing:.13em; }
+    .kicker::before { content:""; background:var(--red); width:6px; height:6px; border-radius:50%; }
+    h1 { font-size:clamp(3rem,7.15vw,5.65rem); letter-spacing:-.062em; line-height:1.14;
+      font-weight:720; margin:1.5rem 0 1.45rem; }
+    .h1-soft { color:var(--muted); }
+    .hero p { color:var(--secondary); font-size:clamp(1rem,2vw,1.23rem); line-height:1.85;
+      max-width:680px; margin:0 auto; }
+    .hero-actions { display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:1rem; margin-top:2.2rem; }
+    .primary { min-height:48px; display:inline-flex; gap:.65rem; justify-content:center; align-items:center;
+      padding:.74rem 1.45rem; border-radius:999px; background:var(--red); color:white;
+      font-size:.95rem; font-weight:630; border:0;
+      transition:transform .22s var(--ease-out),background .22s,box-shadow .22s; }
+    .primary:hover { background:var(--deep); transform:translateY(-2px); box-shadow:0 12px 28px rgba(180,44,67,.22); }
+    .primary:active { transform:scale(.97); transition-duration:.1s; }
+    .quiet-link { min-height:44px; padding:.65rem 1rem; display:inline-flex; align-items:center; gap:.5rem; font-size:.91rem; font-weight:580; }
+    .quiet-link:hover { color:var(--red); }
+    .arrow { display:inline-block; font-size:1rem; }
+    .showcase {
+      overflow:hidden; background:var(--surface); border-radius:26px;
+      box-shadow:var(--shadow); border:1px solid rgba(0,0,0,.035);
+      padding:clamp(1.5rem,4vw,3.15rem); position:relative;
     }
-    .brand-type { font-size: 24px; font-weight: 850; letter-spacing: -.055em; line-height: 1; }
-    .brand-type small {
-      display: block; margin-top: 7px; font-size: 9px; font-weight: 750;
-      letter-spacing: .19em; color: var(--muted);
+    .showcase-header { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:1.65rem; }
+    .showcase-header h2 { font-size:clamp(1.3rem,2.7vw,1.65rem); line-height:1.25; letter-spacing:-.035em; font-weight:700; margin:0; }
+    .overline { font-size:.75rem; color:var(--muted); letter-spacing:.09em; font-weight:650; margin:0 0 .6rem; }
+    .demo-chip { border:1px solid var(--line); background:#fafafc; border-radius:999px; color:var(--muted);
+      padding:.55rem .8rem; white-space:nowrap; font-size:.72rem; }
+    .demo-layout { display:grid; grid-template-columns:1fr 1.05fr; gap:clamp(1.7rem,5vw,4rem); align-items:center; }
+    .demo-controls { padding:1.2rem 0; }
+    .demo-intro { font-size:clamp(1.8rem,3.7vw,2.7rem); line-height:1.23; letter-spacing:-.05em; font-weight:690; margin:0 0 .9rem; }
+    .demo-description { margin:0 0 1.75rem; color:var(--muted); font-size:.96rem; line-height:1.9; max-width:26rem; min-height:4.5rem; }
+    .segmented { display:flex; position:relative; isolation:isolate; padding:4px; background:#eeeef0;
+      border-radius:999px; gap:0; width:100%; max-width:370px; min-height:50px; }
+    .segment-indicator { position:absolute; top:4px; left:4px; bottom:4px; width:calc((100% - 8px) / 3);
+      background:white; border:1px solid rgba(0,0,0,.04); border-radius:999px; z-index:-1;
+      box-shadow:0 1px 3px rgba(0,0,0,.08),0 3px 10px rgba(0,0,0,.035); will-change:transform; }
+    .segment { border:0; background:transparent; color:var(--muted); min-height:42px;
+      flex:1; min-width:0; border-radius:999px; padding:0 .5rem;
+      font-size:.86rem; font-weight:570; transition:color .16s ease,transform .12s ease; }
+    .segment[aria-pressed="true"] { color:var(--ink); font-weight:700; }
+    .segment:active { transform:scale(.96); }
+    .audition { margin-top:1.5rem; display:flex; align-items:center; flex-wrap:wrap; gap:.85rem; }
+    .listen { min-height:46px; border:0; background:var(--ink); color:white; font-size:.88rem;
+      font-weight:620; border-radius:999px; padding:.7rem 1.2rem; display:inline-flex; align-items:center; gap:.62rem;
+      transition:transform .2s var(--ease-out), background .2s; }
+    .listen:hover { background:var(--deep); }
+    .listen:active { transform:scale(.96); transition-duration:.1s; }
+    .listen svg { width:17px; height:17px; display:block; }
+    .feedback { color:var(--muted); font-size:.77rem; min-height:1.1rem; }
+    .instrument { height:360px; border-radius:22px; background:radial-gradient(circle at 50% 24%,#333337,#111114 66%);
+      position:relative; overflow:hidden; display:flex; justify-content:center; align-items:center;
+      color:white; box-shadow:inset 0 1px 0 rgba(255,255,255,.08); }
+    .instrument::before { content:""; position:absolute; width:340px; height:340px; border-radius:50%;
+      background:radial-gradient(circle,rgba(180,44,67,.23),transparent 67%); top:20px; left:calc(50% - 170px);
+      pointer-events:none; }
+    .instrument::after { content:""; position:absolute; inset:0; opacity:.055;
+      background-image:linear-gradient(rgba(255,255,255,.3) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.3) 1px,transparent 1px);
+      background-size:27px 27px; pointer-events:none; mask-image:linear-gradient(to bottom,transparent,black 70%); }
+    .instrument-head { position:absolute; left:24px; top:23px; font-size:.64rem; font-weight:680;
+      letter-spacing:.12em; color:#9e9ea5; }
+    .instrument-head strong { color:#f5f5f7; font-weight:680; }
+    .instrument-foot { position:absolute; bottom:22px; left:24px; right:24px; font-size:.72rem; color:#afafb5; display:flex; justify-content:space-between; }
+    .rings { width:235px; height:235px; position:relative; display:grid; place-items:center; }
+    .ring { position:absolute; border:1px solid rgba(255,255,255,.13); border-radius:50%; inset:13px; }
+    .ring:nth-child(2) { inset:33px; }
+    .ring:nth-child(3) { inset:53px; }
+    .tone { position:absolute; width:70px; height:70px; border-radius:50%; display:grid; place-items:center;
+      background:#fafafd; color:#1d1d1f; box-shadow:0 8px 30px rgba(0,0,0,.25); font-size:1.05rem; font-weight:750;
+      transition:transform .36s var(--ease-out),background .25s,color .25s; }
+    .tone-first { left:18px; top:83px; }
+    .tone-second { right:15px; top:78px; transform:translateY(-15px); background:#db526a; color:white; }
+    .instrument[data-interval="third"] .tone-second { transform:translateY(4px); }
+    .instrument[data-interval="fifth"] .tone-second { transform:translateY(-15px); }
+    .instrument[data-interval="seventh"] .tone-second { transform:translateY(-36px); }
+    .connection { position:absolute; width:85px; height:1px; left:75px; top:117px;
+      background:linear-gradient(90deg,rgba(255,255,255,.2),rgba(255,255,255,.75),rgba(255,255,255,.2));
+      transform-origin:left center; transform:rotate(-7deg); }
+    .instrument[data-interval="third"] .connection { transform:rotate(3deg); }
+    .instrument[data-interval="seventh"] .connection { transform:rotate(-17deg); }
+    .playing .ring { animation:echo .64s var(--ease-out) both; }
+    .playing .ring:nth-child(2) { animation-delay:.08s; }
+    .playing .ring:nth-child(3) { animation-delay:.16s; }
+    @keyframes echo { 0%{opacity:.2;transform:scale(.94)} 52%{opacity:1;transform:scale(1.035)} 100%{opacity:1;transform:scale(1)} }
+    .features { padding:clamp(5rem,10vw,8rem) 0; }
+    .section-heading { text-align:center; margin:0 0 2.2rem; }
+    .section-heading .eyebrow { font-size:.75rem; color:var(--red); font-weight:700; margin-bottom:.85rem; }
+    .section-heading h2 { font-size:clamp(2rem,4.8vw,3.35rem); letter-spacing:-.053em; line-height:1.2; margin:0 0 1rem; }
+    .section-heading p { color:var(--muted); font-size:1rem; line-height:1.85; max-width:35rem; margin:0 auto; }
+    .feature-panel { background:white; border-radius:22px; box-shadow:var(--shadow); overflow:hidden; }
+    .feature-row { padding:1.6rem 2rem; display:grid; align-items:center;
+      grid-template-columns:46px minmax(0,1fr) auto; gap:1.6rem; position:relative; }
+    .feature-row + .feature-row::before { content:""; position:absolute; left:2rem; right:2rem; top:0; height:1px; background:var(--line); }
+    .feature-num { font-size:.9rem; color:var(--faint); font-variant-numeric:tabular-nums; }
+    .feature-row h3 { font-size:1.1rem; letter-spacing:-.025em; margin:0 0 .45rem; font-weight:680; }
+    .feature-row p { font-size:.88rem; line-height:1.8; margin:0; color:var(--muted); }
+    .feature-right { color:var(--faint); font-size:1.3rem; }
+    .closing { padding-bottom:clamp(5rem,9vw,7.2rem); }
+    .closing-panel { border-radius:26px; overflow:hidden; background:#17171b; color:white; position:relative;
+      padding:clamp(2.5rem,7vw,5.2rem); isolation:isolate; }
+    .closing-panel::before { content:""; position:absolute; z-index:-1; width:420px; height:420px;
+      right:-90px; top:-155px; border-radius:50%; background:#7e1930;
+      filter:blur(64px); opacity:.58; pointer-events:none; }
+    .closing-panel .glass-label { width:fit-content; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.21);
+      -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+      border-radius:999px; font-size:.76rem; font-weight:610; padding:.48rem .9rem; color:#f9ebed; }
+    .closing-panel h2 { font-size:clamp(2.2rem,5vw,3.7rem); line-height:1.22; letter-spacing:-.056em;
+      margin:1.6rem 0 .8rem; }
+    .closing-panel p { color:#c5c5c9; max-width:31rem; font-size:1rem; line-height:1.85; margin:0 0 2rem; }
+    .closing-panel .primary { background:#fff; color:#1d1d1f; }
+    .closing-panel .primary:hover { background:#e8e8ed; box-shadow:0 12px 28px rgba(0,0,0,.19); }
+    .footer { border-top:1px solid var(--line); padding:1.6rem 0 2.2rem; font-size:.78rem; color:var(--muted); }
+    .footer .wrap { display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+    .footer a:hover { color:var(--red); }
+    @media(max-width:780px) {
+      .demo-layout { grid-template-columns:1fr; }
+      .instrument { height:330px; }
+      .demo-controls { padding:0; }
+      .demo-description { min-height:0; }
+      .hero { padding-bottom:4rem; }
     }
-    .nav { display: flex; align-items: center; gap: 30px; font-size: 13px; font-weight: 650; }
-    .nav a:hover, .text-link:hover { color: var(--red); }
-    .nav .nav-external { display: inline-flex; gap: 7px; align-items: center; color: var(--red); }
-    .arrow { font-family: sans-serif; }
-    main { overflow: hidden; }
+    @media(max-width:520px) {
+      .nav-inner { min-height:62px; }
+      .logo small { display:none; }
+      .nav-right { gap:.65rem; }
+      .hide-sm { display:none; }
+      .hero { padding:4.3rem 0 3.5rem; }
+      h1 { letter-spacing:-.052em; }
+      .hero-actions { gap:.6rem; }
+      .hero-actions .primary { width:100%; }
+      .showcase { padding:1.45rem 1.2rem; border-radius:22px; }
+      .showcase-header { align-items:flex-start; }
+      .demo-chip { font-size:.65rem; padding:.45rem .65rem; }
+      .instrument { height:300px; }
+      .rings { transform:scale(.86); }
+      .feature-row { grid-template-columns:32px minmax(0,1fr) 10px; padding:1.4rem 1.3rem; gap:.7rem; }
+      .feature-row + .feature-row::before { left:1.3rem; right:1.3rem; }
+      .footer .wrap { flex-direction:column; align-items:flex-start; }
+    }
+    @media(prefers-reduced-motion:reduce) {
+      *,*::before,*::after { scroll-behavior:auto!important; animation:none!important; transition-duration:.01ms!important; }
+      .segment-indicator { will-change:auto; }
+    }
+    @media(prefers-reduced-transparency:reduce) {
+      .nav-shell { background:#f5f5f7; -webkit-backdrop-filter:none; backdrop-filter:none; }
+      .closing-panel .glass-label { background:#3b3235; -webkit-backdrop-filter:none; backdrop-filter:none; }
+    }
+    @media(prefers-contrast:more) {
+      .nav-shell { background:#fff; border-bottom:1px solid #38383c; }
+      .showcase,.feature-panel { border:1px solid #424245; box-shadow:none; }
+      .demo-chip,.segmented { border:1px solid #424245; }
+      .segment-indicator { border-color:#424245; }
+      .feedback,.demo-description,.section-heading p,.feature-row p { color:#424245; }
+    }
+  
+    /* JVAV Crimson: Apple-inspired design system with a distinctly red identity */
+    :root {
+      --ground:#fff7f8;
+      --surface:#fffefe;
+      --ink:#26141a;
+      --secondary:#58434a;
+      --muted:#77636b;
+      --faint:#89747b;
+      --line:rgba(142,35,65,.12);
+      --red:#c51d45;
+      --deep:#971234;
+      --shadow:0 3px 9px rgba(83,15,32,.025),0 18px 52px rgba(122,20,45,.075);
+    }
+    body {
+      background:linear-gradient(180deg,#fff9fa 0%,#fff2f5 54%,#fff8f9 100%);
+    }
+    .nav-shell { background:rgba(255,247,249,.78); }
+    .nav-shell.scrolled { border-color:rgba(142,35,65,.12); }
+    .logo-mark {
+      background:var(--red);
+      box-shadow:0 4px 12px rgba(159,22,56,.19);
+    }
+    .nav-cta { background:var(--red); }
+    .nav-cta:hover { background:var(--deep); }
     .hero {
-      position: relative;
-      display: grid; grid-template-columns: 1.12fr .88fr; align-items: center;
-      gap: 70px; padding-top: 102px; padding-bottom: 118px;
+      position:relative; isolation:isolate; overflow:hidden;
+      margin-top:34px; min-height:565px;
+      padding:clamp(5.2rem,10vw,8rem) 2rem;
+      border-radius:36px;
+      color:#fff;
+      background:
+        radial-gradient(ellipse at 88% 12%,rgba(255,143,158,.47),transparent 33%),
+        radial-gradient(ellipse at 1% 110%,rgba(75,0,30,.29),transparent 47%),
+        linear-gradient(126deg,#93122f 0%,#c41f45 52%,#e74d64 100%);
+      box-shadow:0 22px 58px rgba(155,24,55,.18);
     }
     .hero::before {
-      content: "JVAV"; position: absolute; top: 25px; right: -35px;
-      color: rgba(132, 32, 45, .035); font-size: clamp(170px, 27vw, 430px);
-      font-weight: 900; letter-spacing: -.11em; line-height: .9; pointer-events: none;
-      z-index: -1;
+      content:""; position:absolute; width:410px; height:410px;
+      border:1px solid rgba(255,255,255,.17);
+      border-radius:50%; top:-158px; right:-92px; z-index:0;
+      box-shadow:0 0 0 69px rgba(255,255,255,.044),0 0 0 145px rgba(255,255,255,.027);
+      pointer-events:none;
     }
-    .eyebrow { display: flex; align-items: center; gap: 11px; color: var(--red);
-      font-size: 12px; font-weight: 750; letter-spacing: .15em; text-transform: uppercase; }
-    .eyebrow::before { content: ""; width: 28px; height: 2px; background: currentColor; }
-    h1 { margin: 33px 0 28px; font-size: clamp(54px, 6vw, 86px); line-height: 1.22;
-      font-weight: 850; letter-spacing: -.085em; }
-    h1 .accent { position: relative; color: var(--red); white-space: nowrap; }
-    h1 .accent::after { content: ""; position: absolute; left: 4px; right: 0; bottom: -10px;
-      height: 10px; background: var(--red); clip-path: polygon(0 60%,100% 0,98% 25%,2% 100%); opacity: .18; }
-    .intro { max-width: 480px; font-size: 17px; line-height: 1.95; color: var(--muted); }
-    .hero-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 22px; margin-top: 40px; }
-    .cta { display: inline-flex; align-items: center; justify-content: center; gap: 22px;
-      min-height: 58px; padding: 0 24px; border-radius: 7px;
-      background: var(--red); color: white; font-size: 15px; font-weight: 750;
-      box-shadow: 0 14px 24px rgba(182, 41, 56, .18); transition: transform .2s, background .2s; }
-    .cta:hover { background: var(--deep-red); transform: translateY(-2px); }
-    .cta:focus-visible { outline-color: var(--ink); }
-    .text-link { display: inline-flex; align-items: center; gap: 8px; font-size: 14px;
-      font-weight: 700; border-bottom: 1px solid var(--ink); padding-bottom: 5px; }
-    .site-address { display: flex; align-items: center; gap: 9px; margin-top: 37px;
-      color: var(--muted); font-size: 12px; letter-spacing: .035em; }
-    .site-address .dot { height: 7px; width: 7px; border-radius: 50%; background: var(--red); }
-    .site-address strong { color: var(--ink); font-weight: 700; }
-    .studio-card {
-      position: relative; max-width: 470px; width: 100%; margin-left: auto; transform: rotate(2deg);
-      border: 1px solid #c89e9a; border-radius: 13px; overflow: hidden;
-      background: var(--deep-red); box-shadow: var(--shadow); color: #fff7f0;
+    .hero::after {
+      content:""; position:absolute; left:-100px; bottom:-227px;
+      width:510px; height:510px; border-radius:50%;
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 0 0 78px rgba(255,255,255,.027),0 0 0 167px rgba(255,255,255,.023);
+      z-index:0; pointer-events:none;
     }
-    .studio-card::before { content: ""; position: absolute; inset: 0; opacity: .15; pointer-events: none;
-      background: repeating-linear-gradient(90deg, transparent 0 29px, #fff 30px, transparent 31px); }
-    .card-top { position: relative; display: flex; justify-content: space-between; align-items: center;
-      padding: 25px 30px 0; font-size: 11px; font-weight: 750; letter-spacing: .12em; }
-    .card-top .light { display: inline-flex; align-items: center; gap: 8px; }
-    .card-top .light::before { content: ""; width: 7px; height: 7px; background: #f8b0a0; border-radius: 50%; }
-    .card-mid { position: relative; padding: 69px 32px 41px; }
-    .card-num { font-family: Georgia, serif; font-style: italic; font-size: 17px; opacity: .7; }
-    .card-title { margin: 16px 0 0; font-size: clamp(34px, 3.65vw, 57px); line-height: 1.14;
-      letter-spacing: -.075em; font-weight: 800; }
-    .card-caption { margin-top: 15px; font-size: 12px; opacity: .74; letter-spacing: .11em; }
-    .visual { position: relative; display: flex; align-items: center; justify-content: space-between;
-      gap: 6px; padding: 21px 31px 31px; min-height: 122px; }
-    .visual span { height: 2px; background: #edbcba; flex: 1; opacity: .67; }
-    .visual span:nth-child(2) { height: 36px; opacity: .94; }
-    .visual span:nth-child(3) { height: 61px; }
-    .visual span:nth-child(4) { height: 26px; }
-    .visual span:nth-child(5) { height: 81px; background: #fff3e9; opacity: 1; }
-    .visual span:nth-child(6) { height: 45px; }
-    .visual span:nth-child(7) { height: 67px; }
-    .visual span:nth-child(8) { height: 21px; }
-    .visual span:nth-child(9) { height: 2px; }
-    .card-bottom { position: relative; display: flex; justify-content: space-between; align-items: center;
-      padding: 19px 30px; background: rgba(42, 6, 14, .29); font-size: 10px;
-      font-weight: 750; letter-spacing: .15em; }
-    .mini-stamp { width: 80px; height: 80px; display: grid; place-items: center; position: absolute;
-      left: -32px; bottom: 35px; z-index: 1; border-radius: 50%; transform: rotate(-16deg);
-      border: 1px dashed rgba(132, 32, 45, .6); color: var(--deep-red); background: var(--paper);
-      font-size: 11px; font-weight: 850; letter-spacing: .08em; text-align: center; }
-    .work-section { border-top: 1px solid var(--line); padding: 78px 0 90px; background: var(--white); }
-    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 34px; }
-    .section-head h2 { font-size: clamp(30px, 4vw, 47px); font-weight: 850; letter-spacing: -.065em; margin: 12px 0 0; }
-    .section-head p { max-width: 320px; margin: 0 0 6px; line-height: 1.8; font-size: 13px; color: var(--muted); }
-    .work-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
-    .work-item { padding: 27px 22px 34px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-    .work-num { color: var(--red); font-size: 11px; font-weight: 800; letter-spacing: .13em; }
-    .work-item h3 { margin: 28px 0 11px; font-size: 19px; letter-spacing: -.045em; }
-    .work-item p { margin: 0; color: var(--muted); line-height: 1.8; font-size: 13px; }
-    .bottom-link { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
-      gap: 18px; margin-top: 37px; padding: 24px 27px; background: var(--soft-red);
-      border-left: 3px solid var(--red); }
-    .bottom-link p { margin: 0; font-weight: 750; font-size: 15px; }
-    .bottom-link p small { display: block; color: var(--muted); font-weight: 450; font-size: 12px; margin-top: 5px; }
-    .bottom-link a { font-size: 15px; font-weight: 850; color: var(--deep-red); white-space: nowrap; }
-    .bottom-link a:hover { text-decoration: underline; text-underline-offset: 4px; }
-    .site-footer { border-top: 1px solid var(--line); padding: 31px 0 45px; }
-    .footer-inner { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px;
-      font-size: 12px; color: var(--muted); }
-    .footer-inner strong { color: var(--ink); }
-    .footer-inner a { color: var(--red); font-weight: 750; }
-    @media (max-width: 1000px) {
-      .hero { gap: 35px; }
-      .mini-stamp { display: none; }
-      .work-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero > * { position:relative; z-index:1; }
+    .hero .kicker { color:#ffe7ed; }
+    .hero .kicker::before { background:#ffd2dc; }
+    .hero h1 { text-shadow:0 8px 28px rgba(77,4,30,.08); }
+    .hero .h1-soft { color:#ffe2e9; }
+    .hero p { color:#ffecf0; }
+    .hero-actions .primary { background:#fff; color:#a51c3c; box-shadow:0 7px 20px rgba(70,0,28,.12); }
+    .hero-actions .primary:hover { background:#fff0f3; color:#88172f; box-shadow:0 12px 28px rgba(70,0,28,.21); }
+    .hero .quiet-link { color:#fff5f7; }
+    .hero .quiet-link:hover { color:white; text-decoration:underline; text-underline-offset:5px; }
+    .showcase { border:1px solid rgba(158,42,72,.08); }
+    .showcase::before {
+      content:""; position:absolute; left:0; right:0; top:0; height:4px;
+      background:linear-gradient(90deg,#8f1433,#db3355,#f9a0ab);
     }
-    @media (max-width: 750px) {
-      .container { padding: 0 23px; }
-      .header-inner { min-height: 75px; }
-      .nav { gap: 16px; }
-      .nav .secondary { display: none; }
-      .hero { grid-template-columns: 1fr; padding-top: 72px; padding-bottom: 78px; gap: 65px; }
-      .hero::before { top: 160px; right: -50px; font-size: 55vw; }
-      h1 { margin: 27px 0 22px; font-size: clamp(45px, 9.5vw, 69px); }
-      .intro { font-size: 15px; }
-      .hero-actions { gap: 22px; margin-top: 33px; }
-      .studio-card { max-width: 460px; margin: 0 auto; transform: rotate(1deg); }
-      .card-mid { padding-top: 49px; }
-      .work-section { padding: 63px 0 72px; }
-      .section-head { align-items: start; flex-direction: column; gap: 13px; }
+    .showcase-header .overline { color:var(--red); }
+    .demo-chip { background:#fff0f3; color:#a02340; border-color:rgba(165,28,60,.1); }
+    .segmented { background:#f8eaf0; }
+    .segment-indicator { border-color:rgba(176,44,75,.08); box-shadow:0 3px 13px rgba(115,23,49,.09); }
+    .listen { background:var(--red); }
+    .listen:hover { background:var(--deep); }
+    .instrument {
+      background:
+        radial-gradient(ellipse at 55% 32%,rgba(200,48,90,.36),transparent 60%),
+        linear-gradient(145deg,#4b1026,#230d18 85%);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 16px 37px rgba(73,10,30,.12);
     }
-    @media (max-width: 480px) {
-      .container { padding: 0 20px; }
-      .brand-type { font-size: 22px; }
-      .nav { font-size: 12px; }
-      .nav .nav-external { gap: 4px; }
-      .hero { padding-top: 58px; gap: 54px; }
-      h1 { font-size: clamp(40px, 10vw, 50px); }
-      .cta { width: 100%; }
-      .hero-actions { align-items: stretch; flex-direction: column; gap: 21px; }
-      .text-link { align-self: center; }
-      .site-address { margin-top: 26px; }
-      .card-top { padding: 21px 24px 0; }
-      .card-mid { padding: 48px 24px 28px; }
-      .visual { padding: 10px 24px 21px; min-height: 95px; }
-      .card-bottom { padding: 17px 24px; }
-      .work-grid { grid-template-columns: 1fr; }
-      .work-item { padding: 22px 20px; }
-      .work-item h3 { margin-top: 13px; }
-      .bottom-link { padding: 20px; }
+    .instrument::before { background:radial-gradient(circle,rgba(255,96,132,.26),transparent 70%); }
+    .instrument .ring { border-color:rgba(255,200,211,.23); }
+    .tone-second { background:#f64f79; }
+    .feature-panel { border:1px solid rgba(158,42,72,.075); }
+    .feature-row { transition:background .22s ease; }
+    .feature-row:hover { background:#fff5f7; }
+    .feature-num { color:var(--red); font-weight:700; }
+    .feature-right { color:#d77a8e; }
+    .closing-panel {
+      background:
+        radial-gradient(ellipse at 87% 17%,rgba(255,106,132,.34),transparent 45%),
+        linear-gradient(125deg,#5d0d29 0%,#981638 58%,#b82647 100%);
+      box-shadow:0 18px 48px rgba(121,21,49,.13);
     }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+    .closing-panel::before { background:#fa6288; filter:blur(78px); opacity:.45; }
+    .closing-panel .glass-label { background:rgba(255,225,234,.14); }
+    .closing-panel p { color:#ffe0e8; }
+    .closing-panel .primary { color:#9d173a; }
+    .closing-panel .primary:hover { background:#fff0f3; }
+    .footer { border-color:rgba(142,35,65,.12); }
+    @media(max-width:520px) {
+      .hero { margin-top:18px; padding:4.75rem 1.25rem 4.55rem; border-radius:25px; min-height:auto; }
+      .hero::before { right:-270px; }
+      .hero::after { left:-380px; }
     }
+    @media(prefers-reduced-transparency:reduce) {
+      .nav-shell { background:#fff7f9; -webkit-backdrop-filter:none; backdrop-filter:none; }
+    }
+    @media(prefers-contrast:more) {
+      .hero { background:#a51437; }
+      .hero p,.hero .h1-soft,.hero .kicker { color:#fff; }
+      .showcase,.feature-panel { border:1px solid #67273b; }
+    }
+
   </style>
 </head>
-<body id="top">
-  <a class="skip" href="#main">跳转到主要内容</a>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="#top" aria-label="JVAV 首页">
-        <span class="brand-mark" aria-hidden="true">J.</span>
-        <span class="brand-type">JVAV<small>MUSIC × CODE STUDIO</small></span>
+<body>
+  <a class="skip" href="#main">跳转到内容</a>
+  <header class="nav-shell" id="nav-shell">
+    <div class="wrap nav-inner">
+      <a class="logo" href="#top" aria-label="JVAV 首页">
+        <span class="logo-mark">J.</span>
+        <span>JVAV <small>music × code</small></span>
       </a>
-      <nav class="nav" aria-label="主导航">
-        <a class="secondary" href="#work">正在做的事</a>
-        <a class="nav-external" href="https://jvav.cc/" target="_blank" rel="noopener noreferrer">前往 jvav.cc <span class="arrow" aria-hidden="true">↗</span></a>
+      <nav class="nav-right" aria-label="主导航">
+        <a class="hide-sm" href="#explore">探索方向</a>
+        <a class="hide-sm" href="#sound-lab">声音实验</a>
+        <a class="nav-cta" href="https://jvav.cc/" target="_blank" rel="noopener noreferrer">进入主站 <span aria-hidden="true">↗</span></a>
       </nav>
     </div>
   </header>
-
   <main id="main">
-    <div class="container hero">
-      <div>
-        <div class="eyebrow">一个关于音乐与代码的小空间</div>
-        <h1>打开浏览器，<br><span class="accent">把灵感接上。</span></h1>
-        <p class="intro">这里是 JVAV，周天瑞的音乐与代码工作室。把练习变成可以动手的小工具，也记录代码、声音和偶尔冒出来的想法。</p>
-        <div class="hero-actions">
-          <a class="cta" href="https://jvav.cc/" target="_blank" rel="noopener noreferrer">进入 JVAV 主站 <span aria-hidden="true">↗</span></a>
-          <a class="text-link" href="#work">先看看这里有什么 <span aria-hidden="true">↓</span></a>
-        </div>
-        <p class="site-address"><span class="dot" aria-hidden="true"></span> 官方主站地址： <strong>https://jvav.cc</strong></p>
+    <section class="wrap hero" id="top" aria-labelledby="hero-title">
+      <div class="kicker">JVAV / MUSIC × CODE</div>
+      <h1 id="hero-title">让灵感发生。<br><span class="h1-soft">让好奇有形。</span></h1>
+      <p>音乐不只用来聆听，代码也不只用来编写。<br>我们让声音、练习和创造，在同一个空间里相遇。</p>
+      <div class="hero-actions">
+        <a class="primary" href="https://jvav.cc/" target="_blank" rel="noopener noreferrer">探索 JVAV 主站 <span class="arrow" aria-hidden="true">↗</span></a>
+        <a class="quiet-link" href="#sound-lab">试试声音实验 <span aria-hidden="true">↓</span></a>
       </div>
+    </section>
 
-      <div class="studio-card" aria-label="JVAV 音乐实验室风格插画">
-        <div class="card-top"><span>JVAV / STUDIO</span><span class="light">EXPLORE MORE</span></div>
-        <div class="card-mid">
-          <span class="card-num">No. 001 —</span>
-          <p class="card-title">两个音。<br>一段距离。</p>
-          <div class="card-caption">MUSIC IS A WAY OF THINKING.</div>
-        </div>
-        <div class="visual" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-        <div class="card-bottom"><span>BUILD / LISTEN / PLAY</span><span>J · 2026</span></div>
+    <section class="wrap showcase" id="sound-lab" aria-labelledby="demo-title">
+      <div class="showcase-header">
+        <div><p class="overline">AN INTERACTIVE EXPLORATION</p><h2 id="demo-title">让两个音，开始对话。</h2></div>
+        <span class="demo-chip">可交互 · 可试听</span>
       </div>
-    </div>
-
-    <section class="work-section" id="work" aria-labelledby="work-title">
-      <div class="container">
-        <div class="section-head">
-          <div>
-            <div class="eyebrow">WHAT'S INSIDE</div>
-            <h2 id="work-title">在主站，可以玩些什么？</h2>
+      <div class="demo-layout">
+        <div class="demo-controls">
+          <h3 class="demo-intro" id="interval-title">纯五度。<br>稳定，又开阔。</h3>
+          <p class="demo-description" id="interval-description">把两个音放在一起，耳朵会听见一种特别清晰的支撑感。试着切换不同的音程，感受距离如何改变情绪。</p>
+          <div class="segmented" role="group" aria-label="选择试听音程" id="interval-switch">
+            <span class="segment-indicator" id="segment-indicator" aria-hidden="true"></span>
+            <button type="button" class="segment" data-index="0" aria-pressed="false">大三度</button>
+            <button type="button" class="segment" data-index="1" aria-pressed="true">纯五度</button>
+            <button type="button" class="segment" data-index="2" aria-pressed="false">小七度</button>
           </div>
-          <p>不只是一个展示页。想试试声音、练点音乐，或者看看新的实验，都可以从主站开始。</p>
+          <div class="audition">
+            <button type="button" class="listen" id="listen">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5 12 7-12 7V5Z"/></svg>
+              试听这两个音
+            </button>
+            <span class="feedback" id="listen-feedback" aria-live="polite">C4 → G4</span>
+          </div>
         </div>
-        <div class="work-grid">
-          <article class="work-item"><span class="work-num">01 / INTERVAL</span><h3>音程训练</h3><p>从两个音之间的距离，建立更直觉的音乐感觉。</p></article>
-          <article class="work-item"><span class="work-num">02 / EAR TRAINING</span><h3>听音程与和弦</h3><p>听进去，再认出来；让耳朵与判断慢慢同步。</p></article>
-          <article class="work-item"><span class="work-num">03 / MUSIC TOOL</span><h3>快琴</h3><p>打开浏览器，快速把突然出现的旋律和想法留下。</p></article>
-          <article class="work-item"><span class="work-num">04 / SCALE ATLAS</span><h3>音阶图谱</h3><p>用看得见、听得见的方式探索音阶之间的关系。</p></article>
-        </div>
-        <div class="bottom-link">
-          <p>真正的内容都在 JVAV 主站。<small>GitHub Pages 是一个简洁的入口，不再使用旧的临时域名。</small></p>
-          <a href="https://jvav.cc/" target="_blank" rel="noopener noreferrer">访问 jvav.cc ↗</a>
+        <div class="instrument" id="instrument" data-interval="fifth" aria-label="C4 到 G4 的音程示意图">
+          <div class="instrument-head"><strong>JVAV</strong> / SOUND SPACE</div>
+          <div class="rings" aria-hidden="true">
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <span class="connection"></span>
+            <span class="tone tone-first">C4</span>
+            <span class="tone tone-second" id="tone-second">G4</span>
+          </div>
+          <div class="instrument-foot"><span id="interval-label">PERFECT FIFTH</span><span>440 / 12 TET</span></div>
         </div>
       </div>
     </section>
+
+    <section class="features" id="explore" aria-labelledby="features-title">
+      <div class="wrap">
+        <div class="section-heading">
+          <div class="eyebrow">EXPLORE THE POSSIBILITIES</div>
+          <h2 id="features-title">一切从探索开始。</h2>
+          <p>JVAV 关心的不是复杂功能的堆叠，而是把那些原本抽象的想法，变成可以理解和感受的体验。</p>
+        </div>
+        <div class="feature-panel">
+          <div class="feature-row">
+            <span class="feature-num">01</span><div><h3>听见结构</h3><p>从音程、和弦到音阶，用耳朵认识音乐内部的关系。</p></div><span class="feature-right" aria-hidden="true">↗</span>
+          </div>
+          <div class="feature-row">
+            <span class="feature-num">02</span><div><h3>创造工具</h3><p>让代码成为灵感的延伸，把好奇变成真实可用的小实验。</p></div><span class="feature-right" aria-hidden="true">↗</span>
+          </div>
+          <div class="feature-row">
+            <span class="feature-num">03</span><div><h3>持续生长</h3><p>从一次练习、一个问题开始，慢慢搭建自己的创造空间。</p></div><span class="feature-right" aria-hidden="true">↗</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap closing" aria-labelledby="closing-title">
+      <div class="closing-panel">
+        <div class="glass-label">jvav.cc · Official Website</div>
+        <h2 id="closing-title">好奇心，<br>值得有个去处。</h2>
+        <p>这里是一段设计实验。真正的 JVAV 主站，就在下一次点击之后。</p>
+        <a class="primary" href="https://jvav.cc/" target="_blank" rel="noopener noreferrer">访问 jvav.cc <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
   </main>
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <span><strong>JVAV</strong> · music, code & curiosity.</span>
-      <span>© 2026 JVAV · <a href="https://jvav.cc/" target="_blank" rel="noopener noreferrer">jvav.cc ↗</a></span>
+  <footer class="footer">
+    <div class="wrap">
+      <span>© 2026 JVAV · 音乐 × 代码 · 独立设计作品。</span>
+      <span><a href="https://jvav.cc/" target="_blank" rel="noopener noreferrer">jvav.cc ↗</a></span>
     </div>
   </footer>
+  <script>
+    (() => {
+      'use strict';
+      const choices = [
+        {key:'third', title:'大三度。<br>明亮，又亲近。', description:'两个音之间隔了四个半音，像一种轻快的回应。试着听听，它与纯五度有何不同。', note:'E4', hz:329.6276, label:'MAJOR THIRD'},
+        {key:'fifth', title:'纯五度。<br>稳定，又开阔。', description:'把两个音放在一起，耳朵会听见一种特别清晰的支撑感。试着切换不同的音程，感受距离如何改变情绪。', note:'G4', hz:391.9954, label:'PERFECT FIFTH'},
+        {key:'seventh', title:'小七度。<br>松弛，还有一点悬念。', description:'距离拉远了，声音间的张力也随之改变。感受它如何留下尚未说完的空间。', note:'B♭4', hz:466.1638, label:'MINOR SEVENTH'}
+      ];
+      const buttons=[...document.querySelectorAll('.segment')];
+      const track=document.getElementById('interval-switch');
+      const indicator=document.getElementById('segment-indicator');
+      const instrument=document.getElementById('instrument');
+      const feedback=document.getElementById('listen-feedback');
+      const action=document.getElementById('listen');
+      const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+      let selected=1, x=0, v=0, target=0, lastFrame=0, frame=0, playToken=0, audioContext;
+      const refreshTarget=() => {
+        const t=track.getBoundingClientRect();
+        const b=buttons[selected].getBoundingClientRect();
+        target=b.left-t.left;
+        indicator.style.width=b.width+'px';
+        if (reduced.matches) { x=target; v=0; indicator.style.transform='translate3d('+x+'px,0,0)'; }
+        else startSpring();
+      };
+      const spring=(now) => {
+        const dt=Math.min((now-lastFrame)/1000||1/60,.032); lastFrame=now;
+        const w=20;
+        const a=w*w*(target-x)-2*w*v;
+        v+=a*dt;
+        x+=v*dt;
+        if(Math.abs(target-x)<.1 && Math.abs(v)<.3){x=target;v=0;frame=0;}
+        indicator.style.transform='translate3d('+x.toFixed(3)+'px,0,0)';
+        if(frame) frame=requestAnimationFrame(spring);
+      };
+      const startSpring=() => {
+        if(!frame) {lastFrame=performance.now();frame=requestAnimationFrame(spring);}
+      };
+      const select=(n,focus=false) => {
+        selected=Math.max(0,Math.min(choices.length-1,n));
+        const c=choices[selected];
+        buttons.forEach((button,i)=>button.setAttribute('aria-pressed',String(i===selected)));
+        document.getElementById('interval-title').innerHTML=c.title;
+        document.getElementById('interval-description').textContent=c.description;
+        document.getElementById('tone-second').textContent=c.note;
+        document.getElementById('interval-label').textContent=c.label;
+        instrument.dataset.interval=c.key;
+        instrument.setAttribute('aria-label','C4 到 '+c.note+' 的音程示意图');
+        feedback.textContent='C4 → '+c.note;
+        refreshTarget();
+        if(focus)buttons[selected].focus();
+      };
+      buttons.forEach((b,i)=>{
+        b.addEventListener('click',()=>select(i));
+        b.addEventListener('keydown',e=>{
+          if(e.key==='ArrowRight'||e.key==='ArrowLeft'){
+            e.preventDefault();select((i+(e.key==='ArrowRight'?1:2))%3,true);
+          }else if(e.key==='Home'||e.key==='End'){
+            e.preventDefault();select(e.key==='Home'?0:2,true);
+          }
+        });
+      });
+      window.addEventListener('resize',refreshTarget,{passive:true});
+      reduced.addEventListener?.('change',refreshTarget);
+      const nav=document.getElementById('nav-shell');
+      const updateNav=()=>nav.classList.toggle('scrolled',window.scrollY>8);
+      window.addEventListener('scroll',updateNav,{passive:true});updateNav();
+      const note=(ctx,hz,start,duration) => {
+        const osc=ctx.createOscillator();const gain=ctx.createGain();
+        osc.type='sine';osc.frequency.setValueAtTime(hz,start);
+        gain.gain.setValueAtTime(.0001,start);
+        gain.gain.exponentialRampToValueAtTime(.16,start+.025);
+        gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
+        osc.connect(gain);gain.connect(ctx.destination);
+        osc.start(start);osc.stop(start+duration+.03);
+      };
+      action.addEventListener('click',async()=>{
+        if(!('AudioContext' in window)&&!('webkitAudioContext' in window)){
+          feedback.textContent='当前浏览器不支持音频试听';return;
+        }
+        try {
+          audioContext ??=new (window.AudioContext||window.webkitAudioContext)();
+          if(audioContext.state==='suspended')await audioContext.resume();
+          const c=choices[selected],start=audioContext.currentTime+.02;
+          note(audioContext,261.6256,start,.28);note(audioContext,c.hz,start+.34,.33);
+          const token=++playToken;
+          instrument.classList.remove('playing');
+          void instrument.offsetWidth;
+          instrument.classList.add('playing');
+          feedback.textContent='正在试听 · C4 → '+c.note;
+          window.setTimeout(()=>{if(token===playToken){instrument.classList.remove('playing');feedback.textContent='C4 → '+choices[selected].note;}},850);
+        }catch(_){ feedback.textContent='播放失败，请检查声音权限'; }
+      });
+      if ('ResizeObserver' in window) new ResizeObserver(refreshTarget).observe(track);
+      select(1);
+    })();
+  </script>
 </body>
 </html>
